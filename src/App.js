@@ -1,17 +1,12 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter , Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import "./responsive.css";
-import Dashboard from "./pages/Dashboard";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import { createContext, useEffect, useState } from "react";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import Products from "./pages/Products";
-import ProductDetails from "./pages/ProductDetails";
-import ProductUpload from "./pages/ProductUpload";
 
+import { publicRouters } from './routers';
 
 const MyContext = createContext();
 
@@ -27,8 +22,7 @@ function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const [isOpenNav, setIsOpenNav] = useState(false);
- 
- 
+
   const [user, setUser] = useState({
     name: "",
     roleName: "",
@@ -36,7 +30,6 @@ function App() {
   });
 
   useEffect(() => {
-
     if (themeMode === true) {
       document.body.classList.remove("dark");
       document.body.classList.add("light");
@@ -48,21 +41,18 @@ function App() {
     }
   }, [themeMode]);
 
-  
-
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
-    }
-    window.addEventListener('resize', handleResize);
+    };
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
-
   }, []);
-  
-  const openNav =() => {
+
+  const openNav = () => {
     setIsOpenNav(true);
   };
 
@@ -77,7 +67,7 @@ function App() {
     setThemeMode,
     windowWidth,
     openNav,
-    isOpenNav
+    isOpenNav,
   };
 
   return (
@@ -88,19 +78,21 @@ function App() {
         <div className="main d-flex">
           {isHideSidebarAndHeader !== true && (
             <>
-            <div className={`sidebarOverlay d-none ${isOpenNav===true &&  'show'}`} onClick={()=>setIsOpenNav(false)}></div>
+              <div
+                className={`sidebarOverlay d-none ${
+                  isOpenNav === true && "show"
+                }`}
+                onClick={() => setIsOpenNav(false)}
+              ></div>
 
               <div
                 className={`sidebarWrapper ${
                   isToggleSidebar === true ? "toggle" : ""
-                } ${isOpenNav === true  ? 'open' : '' }`}
+                } ${isOpenNav === true ? "open" : ""}`}
               >
                 <Sidebar />
               </div>
-
-
             </>
-            
           )}
 
           <div
@@ -108,23 +100,16 @@ function App() {
               isToggleSidebar === true ? "toggle" : ""
             }`}
           >
+
             <Routes>
-              <Route path={"/"} exact={true} element={<Dashboard />} />
-              <Route path={"/dashboard"} exact={true} element={<Dashboard />} />
-              <Route path={"/login"} exact={true} element={<Login />} />
-              <Route path={"/signUp"} exact={true} element={<SignUp />} />
-              <Route path={"/products"} exact={true} element={<Products />} />
-              <Route
-                path={"/product/details"}
-                exact={true}
-                element={<ProductDetails />}
-              />
-              <Route
-                path={"/product/upload"}
-                exact={true}
-                element={<ProductUpload />}
-              />
+              {publicRouters.map((route, index) => {
+                const Page = route.component;
+                return (
+                  <Route key={index} path={route.path} element={<Page />} />
+                );
+              })}
             </Routes>
+
           </div>
         </div>
       </MyContext.Provider>
