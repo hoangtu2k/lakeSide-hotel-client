@@ -6,17 +6,15 @@ import ProductDetails from "../pages/ProductDetails";
 import ProductUpload from "../pages/ProductUpload";
 
 const publicRouters = [
-        { path: '/', component: Dashboard },
-        { path: '/dashboard', component: Dashboard },
+
         { path: '/login', component: Login },
         { path: '/signUp', component: SignUp },
-        { path: '/products' , component: Products },
-        { path: '/product/details' , component: ProductDetails },
-        { path: '/product/upload' , component: ProductUpload },
-];
 
-const privateRouters = [
+        { path: '/', component: Dashboard , private: true},
+        { path: '/dashboard', component: Dashboard, private: true },
+        { path: '/products', component: Products, private: true },
+        { path: '/product/details', component: ProductDetails, private: true },
+        { path: '/product/upload', component: ProductUpload, private: true },
+      ];
 
-];
-
-export { publicRouters, privateRouters};
+export { publicRouters};
